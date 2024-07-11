@@ -1,18 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
+import { fetchUserData } from "./store/slices/authThunk";
+import store from "./store";
 import reportWebVitals from "./reportWebVitals";
 import AppRoutes from "./routes/Routes";
+import { getToken } from "./utils/HelperFunctions";
+import history from "./utils/history";
+import { Provider } from "react-redux";
 
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+if (getToken()) {
+  store.dispatch(fetchUserData());
+}
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <Router>
-      <AppRoutes />
+    <Router history={history}>
+      <Provider store={store}>
+        <AppRoutes />
+      </Provider>
     </Router>
   </React.StrictMode>
 );

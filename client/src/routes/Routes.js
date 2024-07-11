@@ -14,7 +14,6 @@ const Routes = () => (
     </Route>
 
     <PrivateRoute exact path="/home" component={<Home />} />
-   
 
     <Route path="*">
       <Login />
