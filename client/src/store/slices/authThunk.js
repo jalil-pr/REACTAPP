@@ -1,18 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import {getToken, removeToken, setToken} from '../../utils/HelperFunctions';
 import api from '../../services/api';
-import history from '../../utils/history';
 
 export const register=createAsyncThunk('auth/register', async (payload)=>{
-    const response = api.post('/user/register', payload);
-    history.push('/landing');
+    const response = await api.post('/users/register', payload);
     return response.data;
 })
 
 export const login = createAsyncThunk('auth/login', async (payload) => {
-    const response = await api.post('/user/login', payload);
+    const response = await api.post('/users/login', payload);
     setToken(response.data.accessToken);
-    history.push('/landing');
     return response.data;
 });
 
@@ -23,7 +20,7 @@ export const fetchUserData = createAsyncThunk('auth/fetchUserData', async (_, {r
     try{
         const accessToken = getToken();
         api.defaults.headers.Authorization = `Bearer ${accessToken}`;
-        const response = await api.get('/user');
+        const response = await api.get('/users');
         return {...response.data, accessToken};
     }catch(e){
         removeToken();

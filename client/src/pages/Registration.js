@@ -17,9 +17,10 @@ const Registration = () => {
   if (token || getToken()) {
     history.push("/landing");
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    store.dispatch(register({ username, email, password }));
+    await store.dispatch(register({ username, email, password })).unwrap();
+    history.push('/login');
   };
   return (
     <div className="page">
