@@ -4,15 +4,15 @@ import api from '../../services/api';
 import history from '../../utils/history';
 
 export const register=createAsyncThunk('auth/register', async (payload)=>{
-    const response = api.post('/register', payload);
-    history.push('/home');
+    const response = api.post('/user/register', payload);
+    history.push('/landing');
     return response.data;
 })
 
 export const login = createAsyncThunk('auth/login', async (payload) => {
-    const response = await api.post('/login', payload);
+    const response = await api.post('/user/login', payload);
     setToken(response.data.accessToken);
-    history.push('/home');
+    history.push('/landing');
     return response.data;
 });
 

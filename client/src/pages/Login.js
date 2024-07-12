@@ -5,16 +5,17 @@ import FormInput from '../components/FormInput';
 import Button from '../components/Button';
 import {login} from '../store/slices/authThunk'
 import { useSelector, useDispatch } from 'react-redux';
-import history from '../utils/history';
+import { useHistory } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
     const {token, loading} = useSelector((state) => state.auth);
+    const history = useHistory();
 
     if(token || getToken()){
-        history.push('/home');
+        history.push('/landing');
     }
 
     const handleLogin = (e) => {
