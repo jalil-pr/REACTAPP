@@ -1,14 +1,15 @@
 const express = require('express');
 const app = express();
-const dotenv = require('dotenv');
+const dotenv = require('dotenv').config();
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const createDB = require('./config/db');
+createDB();
+
 
 app.use(cors());
 app.use(express.json());
 
-app.use(cors());
-dotenv.config();
 const users = [{
     name: "Jalil Haidari",
     password: "23",
@@ -16,6 +17,7 @@ const users = [{
     email: "jalilhaidari53@gmail.com"
 }];
 function generateToken(data){
+    console.log('sercret is::::', process.env.TOKEN_SECRET);
     return jwt.sign(data, process.env.TOKEN_SECRET,{expiresIn: '1800s'});
 }
 
@@ -56,8 +58,18 @@ app.get('/user', authenticateJWT,(req, res) => {
     }
 });
 
+app.post('/user/register', (req, res)=>{
+    const {username, email, password,} = req.body;
+    console.log('details sent:', username)
+    console.log('details sent:', email)
+    console.log('details sent:', password);
+    res.send('consider done!')
 
-app.post('/login', (req, res) => {
+})
+
+
+app.post('/user/login', (req, res) => {
+    console.log('inside login')
     const { email, password } = req.body;
     const user = users.find(u => u.email === email && u.password === password);
 
@@ -78,4 +90,4 @@ app.post('/login', (req, res) => {
 });
 
 
-app.listen(3000, ()=>console.log('server started on port', 3000));
+app.listen(5000, ()=>console.log('server started on port', 5000));
