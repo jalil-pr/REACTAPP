@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import store from "../store";
-import { register } from "../store/slices/authThunk";
-import FormInput from "../components/FormInput";
-import Button from "../components/Button";
+import store from "../../store";
+import { register } from "../../store/slices/authThunk";
+import FormInput from "../FormInput";
+import Button from "../Button";
 import { useSelector } from "react-redux";
-import { getToken } from '../utils/HelperFunctions';
+import { getToken } from '../../utils/HelperFunctions';
 import { useHistory } from 'react-router-dom';
 
 const Registration = () => {

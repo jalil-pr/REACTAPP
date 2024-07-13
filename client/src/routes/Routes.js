@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "../pages/Home";
-import Registration from "../pages/Registration";
-import Login from "../pages/Login";
+import Registration from "../components/Registration/Registration";
 import PrivateRoute from "./PrivateRoute";
 import NotFound from "../pages/NotFound";
 import Landing from "../pages/Landing";
+import Login from "../components/Login/Login";
 
 const Routes = () => (
   <Switch>
@@ -19,9 +19,6 @@ const Routes = () => (
     <Route exact path={["/register"]}>
       <Registration />
     </Route>
-    {/* <PrivateRoute exact path={["/landing"]} element={<NotFound />} >
-        
-    </PrivateRoute> */}
     <PrivateRoute path="/landing">
       <Landing />
     </PrivateRoute>

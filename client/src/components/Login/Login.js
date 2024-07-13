@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Redirect } from "react-router-dom";
-import { getToken } from '../utils/HelperFunctions';
-import FormInput from '../components/FormInput';
-import Button from '../components/Button';
-import {login} from '../store/slices/authThunk'
+import { getToken } from '../../utils/HelperFunctions';
+import FormInput from '../FormInput';
+import Button from '../Button';
+import {login} from '../../store/slices/authThunk'
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 

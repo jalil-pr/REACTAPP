@@ -10,6 +10,7 @@ import history from "./utils/history";
 import { Provider } from "react-redux";
 
 import { BrowserRouter as Router } from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 if (getToken()) {
@@ -19,6 +20,7 @@ root.render(
   <React.StrictMode>
     <Router history={history}>
       <Provider store={store}>
+        <Navbar />
         <AppRoutes />
       </Provider>
     </Router>
