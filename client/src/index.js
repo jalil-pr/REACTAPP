@@ -1,4 +1,6 @@
 import React from "react";
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { fetchUserData } from "./store/slices/authThunk";
@@ -20,7 +22,6 @@ root.render(
   <React.StrictMode>
     <Router history={history}>
       <Provider store={store}>
-        <Navbar />
         <AppRoutes />
       </Provider>
     </Router>

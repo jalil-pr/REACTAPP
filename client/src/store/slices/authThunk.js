@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import {getToken, removeToken, setToken} from '../../utils/HelperFunctions';
 import api from '../../services/api';
 
-export const register=createAsyncThunk('auth/register', async (payload)=>{
+export const registerEvent=createAsyncThunk('auth/register', async (payload)=>{
     const response = await api.post('/users/register', payload);
     return response.data;
 })

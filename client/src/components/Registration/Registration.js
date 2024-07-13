@@ -1,57 +1,177 @@
-import React, { useState } from "react";
+import React from "react";
 import store from "../../store";
-import { register } from "../../store/slices/authThunk";
-import FormInput from "../FormInput";
-import Button from "../Button";
+import { registerEvent } from "../../store/slices/authThunk";
+import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { getToken } from '../../utils/HelperFunctions';
-import { useHistory } from 'react-router-dom';
+import { getToken } from "../../utils/HelperFunctions";
+import { useHistory } from "react-router-dom";
+import "./_registration.scss";
+import {
+  MDBBtn,
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBInput,
+} from "mdb-react-ui-kit";
+import { NavLink } from "react-router-dom";
 
 const Registration = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const history = useHistory();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const { token, loading } = useSelector((state) => state.auth);
   if (token || getToken()) {
     history.push("/landing");
   }
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await store.dispatch(register({ username, email, password })).unwrap();
-    history.push('/login');
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setError,
+    formState: { errors },
+  } = useForm();
+
+  const handleForm = async (form) => {
+    await store.dispatch(registerEvent(form)).unwrap();
+    history.push("/login");
   };
   return (
     <div className="page">
-      <p>Registration page</p>
-      <form onSubmit={handleSubmit}>
-        <FormInput
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-          type="text"
-          value={username}
-        />
-        <FormInput
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          type="email"
-          value={email}
-        />
-        <FormInput
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          type="password"
-          value={password}
-        />
-        <FormInput
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="Confirm Password"
-          type="password"
-          value={confirmPassword}
-        />
-        <Button type="submit" name="Register" />
-      </form>
+      <MDBContainer fluid>
+        <MDBCard className="text-black m-5" style={{ borderRadius: "25px" }}>
+          <MDBCardBody>
+            <MDBRow>
+              <MDBCol
+                md="10"
+                lg="6"
+                className="order-2 order-lg-1 d-flex flex-column align-items-center"
+              >
+                <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+                  Sign up
+                </p>
+                <form onSubmit={handleSubmit(handleForm)}>
+                  <div className="position-relative pb-3 form-input">
+                    <MDBInput
+                      className={`${errors.firstName ? "is-invalid" : ""}`}
+                      label="First name"
+                      {...register("username", {
+                        required: "This field is required.",
+                        minLength: {
+                          value: 3,
+                          message:
+                            "user name should be at least 3 characters long.",
+                        },
+                        maxLength: {
+                          value: 25,
+                          message:
+                            "First name should be at most 10 characters long.",
+                        },
+                      })}
+                    />
+                  </div>
+                  {errors.username && (
+                    <div className="error-mssg">
+                      <span className="invalid-feedback d-block">
+                        {errors.username.message}
+                      </span>
+                    </div>
+                  )}
+                  <div className="position-relative pb-3 form-input">
+                    <MDBInput
+                      className={`${errors.email ? "is-invalid" : ""}`}
+                      label="Email"
+                      {...register("email", {
+                        required: "This field is required.",
+                      })}
+                      type="email"
+                    />
+                  </div>
+                  {errors.email && (
+                    <div className="error-mssg">
+                      <span className="invalid-feedback d-block">
+                        {errors.email.message}
+                      </span>
+                    </div>
+                  )}
+                  <div className="position-relative pb-3 form-input">
+                    <MDBInput
+                      className={`${errors.password ? "is-invalid" : ""}`}
+                      label="Password"
+                      {...register("password", {
+                        required: "This field is required.",
+                        minLength: {
+                          value: 6,
+                          message:
+                            "Password should be at least 6 characters long.",
+                        },
+                      })}
+                    />
+                  </div>
+                  {errors.password && (
+                    <div className="error-mssg">
+                      <span className="invalid-feedback d-block">
+                        {errors.password.message}
+                      </span>
+                    </div>
+                  )}
+                  <div className="position-relative pb-3 form-input">
+                    <MDBInput
+                      className={`${
+                        errors.confirmPassword ? "is-invalid" : ""
+                      }`}
+                      label="Confirm password"
+                      {...register("confirmPassword", {
+                        required: "Passwords should match",
+                      })}
+                      onChange={(e) => {
+                        if (
+                          getValues("root.password") !=
+                          getValues("root.confirmPassword")
+                        ) {
+                          console.log(getValues("root.password"));
+                          return setError("confirmPassword", {
+                            type: "validate",
+                            message: "Passwords should match!",
+                          });
+                        }
+                      }}
+                    />
+                  </div>
+                  {errors.confirmPassword && (
+                    <div className="error-mssg">
+                      <span className="invalid-feedback d-block">
+                        {errors.confirmPassword.message}
+                      </span>
+                    </div>
+                  )}
+                  <div class="position-relative pb-3 form-input">
+                    <label class="form-check-label">
+                      Already have an account?{" "}
+                      <NavLink to="/login">Login</NavLink>
+                    </label>
+                  </div>
+                  <MDBBtn className="mt-4" type="submit">
+                    Register
+                  </MDBBtn>
+                </form>
+              </MDBCol>
+
+              <MDBCol
+                md="10"
+                lg="6"
+                className="order-1 order-lg-2 d-flex align-items-center"
+              >
+                <MDBCardImage
+                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                  fluid
+                />
+              </MDBCol>
+            </MDBRow>
+          </MDBCardBody>
+        </MDBCard>
+      </MDBContainer>
     </div>
   );
 };

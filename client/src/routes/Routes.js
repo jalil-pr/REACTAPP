@@ -6,6 +6,7 @@ import NotFound from "../pages/NotFound";
 import Landing from "../pages/Landing";
 import Login from "../components/Login/Login";
 
+
 const Routes = () => (
   <Switch>
     <Route exact path={["/"]}>

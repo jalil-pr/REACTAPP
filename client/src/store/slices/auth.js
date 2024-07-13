@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUserData, login, signOut, register } from "./authThunk";
+import { fetchUserData, login, signOut, registerEvent } from "./authThunk";
 
 const initialState = {
   token: null,
   loading: false,
   userData: {},
+  error: null
 };
 
 export const authSlice = createSlice({
@@ -13,10 +14,15 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(register.pending, (state, action) => {
+      .addCase(registerEvent.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(register.rejected, (state, action) => {
+      .addCase(registerEvent.rejected, (state, action) => {
+        state.loading = false;
+        state.userData = {};
+        state.token = null;
+      })
+      .addCase(registerEvent.fulfilled, (state, action) => {
         state.loading = false;
         state.userData = {};
         state.token = null;
@@ -37,6 +43,7 @@ export const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload;
       })
       .addCase(fetchUserData.pending, (state, action) => {
         state.loading = true;
@@ -48,11 +55,6 @@ export const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchUserData.rejected, (state, action) => {
-        state.loading = false;
-        state.userData = {};
-        state.token = null;
-      })
-      .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
         state.userData = {};
         state.token = null;

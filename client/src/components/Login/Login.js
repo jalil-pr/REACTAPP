@@ -1,42 +1,125 @@
-import React, {useState, useEffect} from 'react';
-import { Redirect } from "react-router-dom";
-import { getToken } from '../../utils/HelperFunctions';
-import FormInput from '../FormInput';
-import Button from '../Button';
-import {login} from '../../store/slices/authThunk'
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import React from "react";
+import { getToken } from "../../utils/HelperFunctions";
+import { login } from "../../store/slices/authThunk";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import "./_login.scss";
+
+import {
+  MDBBtn,
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBInput,
+} from "mdb-react-ui-kit";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const dispatch = useDispatch();
-    const {token, loading} = useSelector((state) => state.auth);
-    const history = useHistory();
+  const { token, loading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-    if(token || getToken()){
-        history.push('/landing');
+  if (token || getToken()) {
+    history.push("/landing");
+  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const handleLogin = async (form) => {
+    try {
+      await dispatch(login(form)).unwrap();
+      history.push("/landing");
+    } catch (error) {
+     console.log(error)
+      alert("Login Failed. Try Again");
     }
+  };
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        dispatch(login({email, password}));
-    }
+  return (
+    <div className="page">
+      <MDBContainer fluid>
+        <MDBCard className="text-black m-5" style={{ borderRadius: "25px" }}>
+          <MDBCardBody>
+            <MDBRow>
+              <MDBCol
+                md="10"
+                lg="6"
+                className="order-2 order-lg-1 d-flex flex-column align-items-center"
+              >
+                <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+                  Login
+                </p>
+                <form onSubmit={handleSubmit(handleLogin)}>
+                  <div className="position-relative pb-3 form-input">
+                    <MDBInput
+                      className={`${errors.email ? "is-invalid" : ""}`}
+                      label="Email"
+                      {...register("email", {
+                        required: "This field is required.",
+                      })}
+                      type="email"
+                    />
+                  </div>
+                  {errors.email && (
+                    <div className="error-mssg">
+                      <span className="invalid-feedback d-block">
+                        {errors.email.message}
+                      </span>
+                    </div>
+                  )}
+                  <div className="position-relative pb-3 form-input">
+                    <MDBInput
+                      className={`${errors.password ? "is-invalid" : ""}`}
+                      label="Password"
+                      {...register("password", {
+                        required: "This field is required.",
+                      })}
+                    />
+                  </div>
+                  {errors.password && (
+                    <div className="error-mssg">
+                      <span className="invalid-feedback d-block">
+                        {errors.password.message}
+                      </span>
+                    </div>
+                  )}
 
-    return <div className="page">
-        <div>
-            <h2>Login</h2>
-        </div>
-        
-        <form onSubmit={handleLogin}>
-            <FormInput onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" value={email}/>
-            <FormInput onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" value={password}/>
+                  <div className="position-relative pb-3 form-input">
+                    <label className="form-check-label">
+                      Don't an account?{" "}
+                      <NavLink to="/Register">Register</NavLink>
+                    </label>
+                  </div>
 
-            { loading ? <div className="loading"><span>Loading...</span></div> : <Button type="submit" name="Login"/>}
+                  <MDBBtn className="mt-4" type="submit">
+                    Login
+                  </MDBBtn>
+                </form>
+              </MDBCol>
 
-        </form>
-
-    </div>;
-}
+              <MDBCol
+                md="10"
+                lg="6"
+                className="order-1 order-lg-2 d-flex align-items-center"
+              >
+                <MDBCardImage
+                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                  fluid
+                />
+              </MDBCol>
+            </MDBRow>
+          </MDBCardBody>
+        </MDBCard>
+      </MDBContainer>
+    </div>
+  );
+};
 
 export default Login;

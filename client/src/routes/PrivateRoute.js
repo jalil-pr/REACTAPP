@@ -5,7 +5,7 @@ import Loading from "../components/Loading";
 
 const PrivateRoute = ({ children, ...rest }) => {
   const { token, loading } = useSelector((state) => state.auth);
- 
+
   if (loading) {
     return <Loading />;
   }
