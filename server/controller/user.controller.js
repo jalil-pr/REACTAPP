@@ -1,51 +1,64 @@
-const  db  = require('../models');
+const db = require("../models");
 const User = db.User;
-const bcrypt = require('bcrypt');
-
-
+const bcrypt = require("bcrypt");
+const jwtUtil = require("../utils/jwtUtils");
+const { log } = require("console");
 
 const findAll = async (req, res) => {
   console.log("find all users api called.");
-  const users = await User.findAll();
+  const users = await db.users.findAll();
   res.status(200).json(users);
 };
 
 const register = async (req, res) => {
-  const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-  const user  = {
-    username: req.body.username,
-    email: req.body.email,
-    password: hashedPassword,
-    role: 'user'
+  console.log(req.body);
+  const email = req.body.email;
+  const userCheck = await db.users.findOne({ where: { email: email } });
+  if (userCheck && userCheck.email == req.body.email) {
+    res.status(409).send("A user by this email is already registered.");
   }
-  const newUser = await db.users.create(user);
-  res.json({user});
+  try {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+    const user = {
+      username: req.body.username,
+      email: req.body.email,
+      password: hashedPassword,
+      role: "user",
+    };
+    const newUser = await db.users.create(user);
+    res.json({ user });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-
 const login = async (req, res) => {
-  console.log('user>login>request_body:', req.body);
+  console.log("request body: ", req.body);
   const { email, password } = req.body;
-  const user = await User.findOne({where:{email: email}});
-
+  const user = await db.users.findOne({ where: { email: email } });
   if (user) {
-    const token = jwtUtil.generateToken({
-      role: user.role,
-      email: user.email,
-      name: user.firstName,
-    });
-
-    res.json({
-      accessToken: token,
-      user: {
+    const passwordsMatch = await bcrypt.compare(password, user.password);
+    if (passwordsMatch) {
+      const token = jwtUtil.generateToken({
         role: user.role,
         email: user.email,
-        name: user.firstName,
-      },
-    });
+        name: user.username,
+      });
+      res.json({
+        accessToken: token,
+        user: {
+          role: user.role,
+          email: user.email,
+          name: user.username,
+        },
+      });
+    } else {
+      res.status(401).json({ error: "Incorrect password" });
+    }
   } else {
-    res.status(401).send("Username or password incorrect");
+    res.status(404).json({ error: "User not found" });
   }
 };
 
