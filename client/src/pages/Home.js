@@ -15,8 +15,15 @@ const Home = () => {
       <Navbar />
       <div className="container">
         <div className="ra-hero">
-          <h1>Organize your work</h1>
-          <h1>and life, finally.</h1>
+          <h1>Welcome to your app.</h1>
+          <h1>Simpliest react app!</h1>
+          <div className="text-container">
+            <p>
+              Combining the power of Node.Js with the beauty of react and redux. Please
+              register and then login to have a look and feel of the app for
+              yourself.
+            </p>
+          </div>
         </div>
       </div>
     </div>

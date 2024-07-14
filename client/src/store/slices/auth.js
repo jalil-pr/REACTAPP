@@ -49,15 +49,13 @@ export const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
-        const { accessToken, user } = action.payload;
-        state.token = accessToken;
+        const { user } = action.payload;
         state.userData = user;
         state.loading = false;
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.loading = false;
         state.userData = {};
-        state.token = null;
       });
   },
 });

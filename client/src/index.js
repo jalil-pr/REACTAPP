@@ -12,12 +12,12 @@ import history from "./utils/history";
 import { Provider } from "react-redux";
 
 import { BrowserRouter as Router } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 if (getToken()) {
   store.dispatch(fetchUserData());
 }
+
 root.render(
   <React.StrictMode>
     <Router history={history}>

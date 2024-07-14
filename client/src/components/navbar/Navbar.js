@@ -20,7 +20,7 @@ const Navbar = () => {
     history.push("/");
   };
   return (
-    <nav className="navbar">
+    <nav className="raNav">
       <NavLink to="">
       <h1 className="brand">REACT APP</h1>
       </NavLink>
