@@ -6,23 +6,21 @@ import NotFound from "../pages/NotFound";
 import Landing from "../pages/Landing";
 import Login from "../components/Login/Login";
 
-
 const Routes = () => (
   <Switch>
-    <Route exact path={["/"]}>
-      <Home />
-    </Route>
-
     <Route exact path={["/login"]}>
       <Login />
     </Route>
-
     <Route exact path={["/register"]}>
       <Registration />
     </Route>
     <PrivateRoute path="/landing">
       <Landing />
     </PrivateRoute>
+
+    <Route exact path={["/"]}>
+      <Home />
+    </Route>
     <Route path="*">
       <NotFound />
     </Route>

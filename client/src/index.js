@@ -2,7 +2,7 @@ import React from "react";
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+import "./index.scss";
 import { fetchUserData } from "./store/slices/authThunk";
 import store from "./store";
 import reportWebVitals from "./reportWebVitals";
