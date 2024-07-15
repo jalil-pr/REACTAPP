@@ -2,16 +2,13 @@ const db = require("../models");
 const User = db.User;
 const bcrypt = require("bcrypt");
 const jwtUtil = require("../utils/jwtUtils");
-const { log } = require("console");
 
 const findAll = async (req, res) => {
-  console.log("find all users api called.");
   const users = await db.users.findAll();
   res.status(200).json(users);
 };
 
 const register = async (req, res) => {
-  console.log(req.body);
   const email = req.body.email;
   const userCheck = await db.users.findOne({ where: { email: email } });
   if (userCheck && userCheck.email == req.body.email) {
@@ -29,13 +26,11 @@ const register = async (req, res) => {
     const newUser = await db.users.create(user);
     res.json({ user });
   } catch (error) {
-    console.error("Error creating user:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const login = async (req, res) => {
-  console.log("request body: ", req.body);
   const { email, password } = req.body;
   const user = await db.users.findOne({ where: { email: email } });
   if (user) {
