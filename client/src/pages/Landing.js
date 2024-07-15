@@ -5,7 +5,8 @@ import Navbar from "../components/Navbar/Navbar";
 
 
 const Landing = () => {
-  const { token, loading } = useSelector((state) => state.auth);
+  const { loading, userData } = useSelector((state) => state.auth);
+
 
   if (loading) {
     return <Loading />;
@@ -14,7 +15,12 @@ const Landing = () => {
     <div className="page">
       <Navbar/>
       
-      <p>Landing page here</p>
+      <div className="container">
+        <div className="ra-hero">
+          <h1>Welcome to your app {userData.name}</h1>
+          
+        </div>
+      </div>
     </div>
   );
 };

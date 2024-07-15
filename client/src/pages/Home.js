@@ -6,7 +6,7 @@ import { getToken } from "../utils/HelperFunctions";
 
 const Home = () => {
   const history = useHistory();
-  const { token, loading } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
   if (token || getToken()) {
     history.push("/landing");
   }
@@ -20,7 +20,7 @@ const Home = () => {
           <div className="text-container">
             <p>
               Combining the power of Node.Js with the beauty of react and redux. Please
-              register and then login to have a look and feel of the app for
+              register and then log in to have a look and feel of the app for
               yourself.
             </p>
           </div>

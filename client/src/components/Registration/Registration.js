@@ -20,7 +20,7 @@ import { NavLink } from "react-router-dom";
 
 const Registration = () => {
   const history = useHistory();
-  const { token, loading } = useSelector((state) => state.auth);
+  const { token} = useSelector((state) => state.auth);
   if (token || getToken()) {
     history.push("/landing");
   }
@@ -69,6 +69,8 @@ const Registration = () => {
                             "First name should be at most 10 characters long.",
                         },
                       })}
+                      id="First name"
+                      
                     />
                   </div>
                   {errors.username && (
@@ -86,6 +88,7 @@ const Registration = () => {
                         required: "This field is required.",
                       })}
                       type="email"
+                      id="Email"
                     />
                   </div>
                   {errors.email && (
@@ -107,6 +110,7 @@ const Registration = () => {
                             "Password should be at least 6 characters long.",
                         },
                       })}
+                      id="Password"
                     />
                   </div>
                   {errors.password && (
@@ -127,7 +131,7 @@ const Registration = () => {
                       })}
                       onChange={(e) => {
                         if (
-                          getValues("root.password") !=
+                          getValues("root.password") !==
                           getValues("root.confirmPassword")
                         ) {
                           console.log(getValues("root.password"));
@@ -137,6 +141,7 @@ const Registration = () => {
                           });
                         }
                       }}
+                      id="Confirm password"
                     />
                   </div>
                   {errors.confirmPassword && (
@@ -146,8 +151,8 @@ const Registration = () => {
                       </span>
                     </div>
                   )}
-                  <div class="position-relative pb-3 form-input">
-                    <label class="form-check-label">
+                  <div className="position-relative pb-3 form-input">
+                    <label className="form-check-label">
                       Already have an account?{" "}
                       <NavLink to="/login">Login</NavLink>
                     </label>

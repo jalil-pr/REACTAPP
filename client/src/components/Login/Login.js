@@ -19,7 +19,7 @@ import {
 import { useForm } from "react-hook-form";
 
 const Login = () => {
-  const { token, loading } = useSelector((state) => state.auth);
+  const { token, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -36,9 +36,8 @@ const Login = () => {
     try {
       await dispatch(login(form)).unwrap();
       history.push("/landing");
-    } catch (error) {
-     console.log(error)
-      alert("Login Failed. Try Again");
+    } catch (e) {
+      alert("Username or password is wrong");
     }
   };
 
@@ -62,9 +61,11 @@ const Login = () => {
                       className={`${errors.email ? "is-invalid" : ""}`}
                       label="Email"
                       {...register("email", {
-                        required: "This field is required.",
+                        required: "Email is required.",
                       })}
                       type="email"
+                      id="Email"
+                      name="email"
                     />
                   </div>
                   {errors.email && (
@@ -79,8 +80,9 @@ const Login = () => {
                       className={`${errors.password ? "is-invalid" : ""}`}
                       label="Password"
                       {...register("password", {
-                        required: "This field is required.",
+                        required: "Password is required.",
                       })}
+                      id="Password"
                     />
                   </div>
                   {errors.password && (
@@ -93,8 +95,8 @@ const Login = () => {
 
                   <div className="position-relative pb-3 form-input">
                     <label className="form-check-label">
-                      Don't an account?{" "}
-                      <NavLink to="/Register">Register</NavLink>
+                      Don't have an account?{" "}
+                      <NavLink to="/Register" >Register</NavLink>
                     </label>
                   </div>
 
